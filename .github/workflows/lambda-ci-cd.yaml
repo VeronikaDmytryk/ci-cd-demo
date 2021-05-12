@@ -1,8 +1,8 @@
-name: CI/CD Pipeline for Node.js lambda
-on: 
-  pull_request:
-    paths:
-    - 'lambda/**'
+name: CI/CD Pipeline for Node.js lambda                      # Name of the pipeline
+on:                                         
+  pull_request:                                              # the workflow will be triggered in the case of a
+    paths:                                                   # pull-request or push to the main branch
+    - 'lambda/**'                                            # only if something in lambda folder got changed
     branches:
         - main
   push:
@@ -11,45 +11,44 @@ on:
     branches:
         - main
 jobs:
-  continuous-integration:
-    name: Test
-    runs-on: ubuntu-latest    
+  continuous-integration:                                    # Name of the job
+    runs-on: ubuntu-latest                                   # OS where to execute the below code
     steps:
-      - uses: actions/checkout@v1
-      - name: Install Dependencies
+      - uses: actions/checkout@v1                            # Github  lambda.zip to be uploaded to S3
+      - name: Install Dependencies                           # Install dependencies step
         working-directory: ./lambda
         run: npm install
-      - name: Test
+      - name: Test                                           # Test the lambda
         working-directory: ./lambda
         run: npm run test
-      - name: Create Zipfile archive of Dependencies
-        run: cd ./lambda && zip -g -r9 ../lambda.zip -r .
-      - name: Upload zip file artifact
-        uses: actions/upload-artifact@v2
+      - name: Create Zipfile archive of Dependencies         # Zip the lambda. Note - we create the zip file in the root of the project
+        run: cd ./lambda && zip -g -r9 ../lambda.zip -r .   
+      - name: Upload zip file artifact                       # Github prepares lambda.zip to be uploaded to S3
+        uses: actions/upload-artifact@v2                     # Github utiity we need to prepare
         with:
           name: lambda
-          path: lambda.zip
-  continuous-deployment:
-    runs-on: ubuntu-latest
-    needs: [continuous-integration]
+          path: lambda.zip                                   # lambda.zip in the root
+  continuous-deployment:                                     # Name of the job
+    runs-on: ubuntu-latest                                   # OS where to execute the below code
+    needs: [continuous-integration]                          # This job requires a SUCCESSFUL completion of the continuous-integration job
     steps:
       # Step 1
-      - name: Install AWS CLI
+      - name: Install AWS CLI                                           # Install AWS CLI on Github's server
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: 1
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}           # Provide your AWS credentials
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}           # You only need to provide aws_session_token if you are using expirable AWS account
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       # Step 2
-      - name: Download Lambda lambda.zip
+      - name: Download Lambda lambda.zip                                # Download the zip folder that we prepared in the first job
         uses: actions/download-artifact@v2
         with:
-          name: lambda
+          name: lambda                                                  # Provide the name of the zip folder here
       # Step 3 - would need to update
-      - name: Upload to S3
+      - name: Upload to S3                                              # Upload the zip folder to S3 bucket
         run: aws s3 cp lambda.zip s3://ci-cd-demo-bucket/lambda.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -57,7 +56,7 @@ jobs:
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       # Step 4 - would need to update
-      - name: Deploy new Lambda
+      - name: Deploy new Lambda                                         # Deploy the code from the S3 to the lambda
         run: aws lambda update-function-code --function-name ci-cd-demo-lambda --s3-bucket ci-cd-demo-bucket --s3-key lambda.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
