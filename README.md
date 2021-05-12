@@ -1,7 +1,12 @@
 # Continuous Integration and deployment of a Node.js lambda function
-This repository is for demonstration of CI/CD of a Node.js lambda function.
+This repository is for demonstration of CI/CD of a Node.js lambda function (with AWS).
 
-### Why CI/CD is used
+### Why CI/CD is useful
+CI/CD is a powerful tool that allows you to make code integration and deployment processes much easier and pain free.
+After you push new changes to the repository, CI/CD pipeline would be triggered. It would automatically test and/or build your code and if no problems found, it would deploy it to production.
+
+This allows you to see if there are problems that could break your production code at an early stage.
+Of course this requires a lot of great tests to catch them up.
 
 ### Prerequisites
 installed Node.js on your machine
