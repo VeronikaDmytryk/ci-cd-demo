@@ -91,11 +91,11 @@ You need to prepare 2 things in an AWS account:
 * a Node.js lambda function
 > Save the name of the **bucket** and the **function**, you'll use it later
 
-## Step 7
+## Step 8
 Now let's create a workflow using [Github Actions syntax]("https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions") 
 Add **.github/workflows** folders to the root of the project and create a **lambda-ci-cd.yaml** file
 
-## Step 7
+## Step 9
 Here is the content you should add to the file, with comments
 ```
   name: CI/CD Pipeline for Node.js lambda     # Name of the pipeline
@@ -119,7 +119,7 @@ There are 3 sections of the workflow, which answers these questions:
 * **on** - When to trigger the workflow (conditions)?
 * **jobs** - What to do during the workflow?
 
-## Step 8
+## Step 10
 Now, you will specify 2 jobs in the jobs section. 
 One is for continuous integration (CI) and one is for continuous deployment (CD)
 ```
@@ -142,7 +142,7 @@ Using Github Actions, you don't nessecarily need to have a runner (server) for t
 You can just specify the Operating System that you would like to use, and Github will provide a runner for us for free* (for public repositories)
 But there is another option - you can specify a self-hosted runner. To find more about self-hosted runners, click [here](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners).
 
-## Step 9
+## Step 11
 Create tasks for the CI job.
 ```
     steps:
@@ -169,7 +169,7 @@ If you are not familiar with the zip command, here are some details
 * **-r** - recursively adds files (add all the files from the subdirectories as well)
 * **.** - from the current directory
 
-## Step 10
+## Step 12
 Before implementing the Continuous Deployment job, you need to add your AWS credentials to the Github repository as secrets.
 This will allow your code to be deployed straight to the AWS Cloud from the Github repository.
 For that you need to go back to your Github repsitory you created at the beginning of this tutorial
@@ -183,7 +183,7 @@ Go to **Settings -> Secrets -> New repository secret**
 > You can find these credentials for your user in your AWS management console - IAM. 
 > If you are using AWS Educate account you should find your account details on Vocareum.com
 
-## Step 11
+## Step 13
 Create tasks for the CD job.
 ```
       # Step 1
@@ -223,7 +223,7 @@ Create tasks for the CD job.
 ***<your-aws-lambda-name-here>*** with the lambda name that your created in the AWS earlier
 > \* You only need to provide aws_session_token if you are using expirable credentials
 
-# Step 12
+## Step 14
 Now you can commit our changes and push it to our remote repository
 ``
 git add *
@@ -235,7 +235,7 @@ git commit -m "Created a lambda function and added a CI/CD workflow"
 git push origin lambda
 ``
 
-## Step 13
+## Step 15
 Create a pull request for **lambda** branch to merge **main**.
 > If you are using expirable credentials, please update those before creating a pull request.
 
