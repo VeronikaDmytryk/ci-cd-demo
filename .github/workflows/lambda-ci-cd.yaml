@@ -23,7 +23,7 @@ jobs:
         working-directory: ./lambda
         run: npm run test
       - name: Create Zipfile archive of Dependencies
-        run: cd ./lambda && zip -r9 -g ../lambda.zip -r .
+        run: cd ./lambda && zip -g -r9 ../lambda.zip -r .
       - name: Upload zip file artifact
         uses: actions/upload-artifact@v2
         with:
