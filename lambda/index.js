@@ -1,4 +1,3 @@
 module.exports.handler =  async function(event, context) {
-    console.log("Hello world")
-    return 10;
+    return "Hello world";
 }
