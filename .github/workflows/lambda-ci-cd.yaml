@@ -50,16 +50,16 @@ jobs:
       # Step 3 - would need to update
       - name: Upload to S3                                              # Upload the zip folder to S3 bucket
         run: aws s3 cp lambda.zip s3://ci-cd-demo-bucket/lambda.zip
-        # env:
-        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-        #   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       # Step 4 - would need to update
       - name: Deploy new Lambda                                         # Deploy the code from the S3 to the lambda
         run: aws lambda update-function-code --function-name ci-cd-demo-lambda --s3-bucket ci-cd-demo-bucket --s3-key lambda.zip
-        # env:
-        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-        #   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
